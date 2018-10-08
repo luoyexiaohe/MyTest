@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="UTF-8">
+<!ELEMENT class (import*,class-qualifier,class-father,interfaces*,attribute,methond)>
+<!ELEMENT import(import-class*)>
+<!ELEMENT import-class (#PCDATA)>
+<!ELEMENT class-qualifier (#PCDATA)>
+<!ELEMENT class-father (#PCDATA)>
+<!ELEMENT interfaces (interface*)>
+<!ELEMENT interface (#PCDATA)
+<!ELEMENT attribute(#PCDATA)>
+<!ELEMENT methond(#PCDATA)>

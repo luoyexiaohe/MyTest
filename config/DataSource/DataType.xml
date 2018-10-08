@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE unspecified PUBLIC "//UNKNOWN/" "unknown.dtd">
+<data>
+    <type id="TINYINT">long</type>
+    <type id="SMALLINT">long</type>
+    <type id="MEDIUMINT">long</type>
+    <type id="INTEGER">Long</type>
+    <type id="INT">long</type>
+    <type id="BIGINT">long</type>
+    <type id="FLOAT">double</type>
+    <type id="DOUBLE">double</type>
+    <type id="DECIMAL">double</type>
+    <type id="CHAR">String</type>
+    <type id="VARCHAR">String</type>
+    <type id="TINYBLOB">String</type>
+    <type id="TINYTEXT">String</type>
+    <type id="BLOB">String</type>
+    <type id="TEXT">String</type>
+    <type id="MEDIUMBLOB">String</type>
+    <type id="MEDIUMTEXT">String</type>
+    <type id="LOGNGBLOB">String</type>
+    <type id="LongTEXT">String</type>
+    <type id="DATE">long</type>
+    <type id="TIME">long</type>
+    <type id="YEAR">long</type>
+    <type id="DATETIME">long</type>
+    <type id="TIMESTAMP">long</type>
+</data>

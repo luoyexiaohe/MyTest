@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE class SYSTEM "../hfyReverse.dtd">
+<class>
+	<package>entity</package>
+
+    <import>
+<!--         <import-class>DataSource.DataSource.DataSource</import-class> -->
+    </import>
+<!--<class-name>Test</class-name> -->
+    <class-qualifier>public</class-qualifier>     
+    <class-father></class-father>
+    <interfaces>
+<!--         <interface>interface1</interface> -->
+    </interfaces>
+    <attribute qualifier="private" isStatic="false" isFinal="false"/>
+    <methond qualifier="public" isStatic="false" isFinal="false"/>
+</class>
