@@ -1,7 +1,9 @@
 package test;
 
 import java.util.HashMap;
+import java.util.Locale;
 import java.util.Map;
+import java.util.ResourceBundle;
 
 import org.junit.Test;
 
@@ -90,5 +92,22 @@ public class TestClass {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
+	}
+	
+	@Test
+	public void testFunc9() {
+		System.out.println("123456".startsWith("1"));
+	}
+	
+	@Test
+	public void testFunc10() {
+		System.out.println(StringUtil.StringUtil.replace_("asd_zxc"));
+	}
+	
+	@Test
+	public void testFunc11() {
+		ResourceBundle rb = ResourceBundle.getBundle("cfg/cfg", Locale.ENGLISH);
+		String str = rb.getString("path");
+		System.out.println(str);
 	}
 }

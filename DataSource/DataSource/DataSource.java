@@ -16,7 +16,7 @@ public class DataSource {
 
     @Test
     public void test1() {
-        JDBCUtil ju = new JDBCUtil();
+        JDBCUtil.initialize();
         String sql = "select table_name from information_schema.tables where table_schema='laundry' and table_type='base table';";
         Connection conn = JDBCUtil.conn;
         try {
@@ -89,7 +89,7 @@ public class DataSource {
      */
     @Test
     public void test2() {
-        JDBCUtil ju = new JDBCUtil();
+        JDBCUtil.initialize();
         String sql = "select table_name from information_schema.tables where table_schema='laundry' and table_type='base table';";
         Connection conn = JDBCUtil.conn;
         try {
@@ -111,7 +111,7 @@ public class DataSource {
      */
     @Test
     public void test3() {
-        JDBCUtil ju = new JDBCUtil();
+        JDBCUtil.initialize();
         String sql = "select COLUMN_NAME cName,DATA_TYPE dType,COLUMN_COMMENT cComment from information_schema.`COLUMNS`" + 
         		"	where TABLE_SCHEMA='laundry' and TABLE_NAME='user';";
         Connection conn = JDBCUtil.conn;
@@ -139,7 +139,7 @@ public class DataSource {
      */
     @Test
     public void test5() {
-        JDBCUtil ju = new JDBCUtil();
+        JDBCUtil.initialize();
         String sql = "select COLUMN_NAME from information_schema.COLUMNS where table_schema='laundry' and TABLE_NAME='order' and COLUMN_KEY='PRI';";
         Connection conn = JDBCUtil.conn;
         try {

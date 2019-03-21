@@ -9,6 +9,8 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.LinkedList;
 import java.util.List;
+import java.util.Locale;
+import java.util.ResourceBundle;
 
 import org.jsoup.nodes.Document;
 import org.jsoup.nodes.Element;
@@ -23,9 +25,11 @@ public class CreateJava {
     
     @Test
     public void test1() {
-        JDBCUtil ju = new JDBCUtil();
+    	
+        JDBCUtil.initialize();
         String sql = null;
-        sql = "select table_name from information_schema.tables where table_schema='laundry' and table_type='base table';";
+        String table_schema="myspringmvc_jdbc";
+        sql = "select table_name from information_schema.tables where table_schema='"+table_schema+"' and table_type='base table';";
         Connection conn = JDBCUtil.conn;
         List<String> rsList = new LinkedList<String>();
         try {
@@ -39,16 +43,20 @@ public class CreateJava {
         }
         for(String tableName:rsList) {
             sql = "select COLUMN_NAME cName,DATA_TYPE dType,COLUMN_COMMENT cComment from information_schema.`COLUMNS`" + 
-                    "    where TABLE_SCHEMA='laundry' and TABLE_NAME='"+tableName+"';";
+                    "    where TABLE_SCHEMA='"+table_schema+"' and TABLE_NAME='"+tableName+"';";
             try {
                 PreparedStatement ps = conn.prepareStatement(sql);
                 ResultSet rs = ps.executeQuery();
                 List columnNameList = new LinkedList();
                 PlugClass.dataMap.put("ResultSet", rs);
                 System.out.println(tableName);
+                tableName=StringUtil.replace_(tableName);
                 String tableClass = writeCla(tableName);
                 System.out.println(tableClass);
-                File entity = new File("D:\\jar",StringUtil.uplowerFirst(tableName)+".java");
+                /*********************下面这句话的存储路径需要进行修改******************************/
+                ResourceBundle rb = ResourceBundle.getBundle("cfg/cfg", Locale.ENGLISH);
+        		String path = rb.getString("path");
+                File entity = new File(path,StringUtil.uplowerFirst(tableName)+".java");
                 writeEntity(entity,tableClass);
             }catch (SQLException e) {
                 e.printStackTrace();
@@ -64,12 +72,18 @@ public class CreateJava {
     }
     
     public static void writeEntity(File f ,String content) {
+    	
     	FileWriter writer;
         try {
-          writer = new FileWriter(f);
-          writer.write(content);
-          writer.flush();
-          writer.close();
+        	if(!f.exists()) {
+        		f.getParentFile().mkdirs();
+        		System.out.println(f.getAbsolutePath());
+        		f.createNewFile();
+        	}
+            writer = new FileWriter(f);
+            writer.write(content);
+            writer.flush();
+            writer.close();
         } catch (IOException e) {
           e.printStackTrace();
         }
@@ -85,6 +99,8 @@ public class CreateJava {
         tableName = StringUtil.uplowerFirst(tableName);
         
         StringBuffer cla = new StringBuffer();
+        
+        cla.append("package com.hfy.single;"+PlugClass.NEW_LINE);
         
         String imp = getImprt();
         cla.append(imp);
@@ -102,7 +118,7 @@ public class CreateJava {
         Elements interfaces = dataSourceDoc.getElementsByTag("interfaces");
         if(interfaces!=null) {
             Elements interfacesClass = dataSourceDoc.getElementsByTag("interface");
-            if(interfacesClass!=null) {
+            if(interfacesClass!=null && interfacesClass.size()>0) {
                 cla.append(" implements");
                 for(Element interfaceClass:interfacesClass) {
                     cla.append(" " + interfaceClass.html().trim()+",");
@@ -132,9 +148,11 @@ public class CreateJava {
         Document dataSourceDoc = PlugClass.initDataSource();
         Element e = dataSourceDoc.getElementsByTag("import").first();
         Elements es = e.getElementsByTag("import-class");
-        //获取引入包的具体名称
-        for(Element el : es) {
-            imp = imp.append("import "+el.html()+";"+PlugClass.NEW_LINE);
+        if(es!=null && es.size()>0) {
+        	//获取引入包的具体名称
+        	for(Element el : es) {
+        		imp = imp.append("import "+el.html()+";"+PlugClass.NEW_LINE);
+        	}
         }
         return imp.toString();
     }
