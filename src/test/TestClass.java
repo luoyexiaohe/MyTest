@@ -1,5 +1,6 @@
 package test;
 
+import java.io.FileNotFoundException;
 import java.util.Arrays;
 import java.util.Collection;
 import java.util.HashMap;
@@ -208,6 +209,114 @@ public class TestClass {
 		String d = "12"+"3";
 		System.out.println(b==d);
 		System.out.println(c==d);
+	}
+	
+	/**
+	 * 测试异常处理流程
+	 * @author: JOHN
+	 * @date: 2019年3月27日
+	 * @time: 下午3:51:42
+	 * 结论：1.try块里面的return语句并不会真的把结果返回，而是把结果先加到了缓存里面去了，再执行了finally语句块之后才将结果进行了返回。
+	 * 		2.Exception类需要放到最后进行捕获，不能提前进行捕获;
+	 * 		3.finally块中如果有return语句，则编译不通过
+	 */
+	@Test
+	public void testFunc18() {
+		try {
+			testFunc18_1(9,43);
+			throw new ArithmeticException();
+		}catch(FileNotFoundException e) {
+			System.out.println("FileNotFoundException");
+		}catch(ArithmeticException e) {
+			System.out.println("ArithmeticException");
+		}catch(Exception e) {
+			System.out.println("exception");
+		}finally{
+			System.out.println("finally");
+//			return;
+		}
+		System.out.println("和是：");
+	}
+	private static int testFunc18_1(int a,int b) throws FileNotFoundException {
+		return a+b;
+	}
+	
+	/**
+	 * 测试变量的命名规则
+	 * @author: JOHN
+	 * @date: 2019年3月28日
+	 * @time: 上午10:13:32
+	 * 结论：变量除了不能使用数字开头，其他使用$（美元符）或者是_（下划线）都是合法变量的命名
+	 */
+	@Test
+	public void testFunc19() {
+		Integer $data = 123;
+	}
+	
+	
+	/**
+	 * public和static的位置可以进行互换
+	 * @author: JOHN
+	 * @date: 2019年3月28日
+	 * @time: 下午12:18:11
+	 */
+	static public void  testFunc20() {
+		
+	}
+	
+	/**
+	 * 测试参数的传递
+	 * @author: JOHN
+	 * @date: 2019年3月28日
+	 * @time: 下午12:19:35
+	 * 结论：如果参数是基本数据类型传递，则为值传递，如果参数是对象，则是将对象的引用进行拷贝，一旦在方法内部将对象
+	 * 的引用进行修改，极有可能会出现逻辑错误。因为在方法内部对象的引用修改并不影响原来对象。
+	 */
+	@Test
+	public void testFunc21() {
+		com.hfy.single.User user = new com.hfy.single.User();
+		user.setAge(24);
+		testFunc21_1(user);
+		System.out.println(user.getAge());
+		
+		int a = 8;
+		testFunc21_2(a);
+		System.out.println(a);
+		
+		System.out.println(user.toString());
+		testFunc21_3(user);
+		
+	}
+	
+	public static void testFunc21_1(com.hfy.single.User user) {
+		user.setAge(12);
+		System.out.println(user.getAge());
+	}
+	
+	public static void testFunc21_2(int a) {
+		a=6;
+		System.out.println(a);
+	}
+	public static void testFunc21_3(com.hfy.single.User user) {
+		user = new com.hfy.single.User();
+		System.out.println(user.toString());
+		
+	}
+	
+	/**
+	 * 异常处理：catch块可以不存在
+	 * @author: JOHN
+	 * @date: 2019年3月28日
+	 * @time: 下午4:46:26
+	 */
+	@Test
+	public void testFunc22() {
+		try {
+			System.out.println(123);
+		} finally {
+			System.out.println(123);
+			
+		}
 	}
 	
 }
