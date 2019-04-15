@@ -9,8 +9,19 @@ import java.util.Locale;
 import java.util.Map;
 import java.util.ResourceBundle;
 import java.util.Vector;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
+import org.dom4j.Document;
+import org.dom4j.DocumentException;
+import org.dom4j.DocumentHelper;
 import org.junit.Test;
+
+import com.google.gson.JsonElement;
+import com.google.gson.JsonParser;
+
+import groovy.lang.GroovyShell;
+import groovy.lang.Script;
 
 public class TestClass {
 
@@ -319,4 +330,169 @@ public class TestClass {
 		}
 	}
 	
+	/**
+	 * 测试stringbuilder的截取字符串时的下标能否和长度一致
+	 * @author: JOHN
+	 * @date: 2019年4月8日
+	 * @time: 下午11:30:31
+	 */
+	@Test
+	public void testFunc23() {
+		StringBuilder sb = new StringBuilder("0123456");
+		System.out.println(sb.substring(0, 7));
+	}
+	
+	/**
+	 * 判断字符串中是否包含有符合xml标签的字符串存在
+	 * @author: JOHN
+	 * @date: 2019年4月9日
+	 * @time: 上午12:21:15
+	 * 结论：下面的写法报错了
+	 */
+	@Test
+	public void testFunc24() {
+		try {
+			Document doc = DocumentHelper.parseText("<123>456</123>456");
+			System.out.println(doc.getText());
+		} catch (DocumentException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+	}
+	
+	/**
+	 * 正则表达式匹配小数
+	 * @author: JOHN
+	 * @date: 2019年4月9日
+	 * @time: 上午12:45:46
+	 */
+	@Test
+	public void testFunc25() {
+		String testStr = "dwaio12.12whueia123.45456ihui";
+		Pattern pattern = Pattern.compile("[0-9]+\\.[0-9]+");
+		Matcher m = pattern.matcher(testStr);
+		while(m.find()) {
+			System.out.println(m.group());
+		}
+		
+	}
+	
+	/**
+	 * 正则表达式匹配小数
+	 * @author: JOHN
+	 * @date: 2019年4月9日
+	 * @time: 上午12:45:46
+	 */
+	@Test
+	public void testFunc26() {
+		String testStr = "<jidjsaioj>12.12whueia123.45456ihui";
+		Pattern pattern = Pattern.compile("-?[0-9]+\\.[0-9]+");
+		Matcher m = pattern.matcher(testStr);
+		if(m.find()) {
+			System.out.println(m.group());
+		}else {
+			System.out.println("未找到匹配字符串");
+		}
+		
+	}
+	/**
+	 * 测试正则表达式匹配xml标签
+	 * @author: JOHN
+	 * @date: 2019年4月9日
+	 * @time: 上午8:56:29
+	 */
+	@Test
+	public void testFunc27() {
+		String testStr = "<jidjsaioj>12.12whueia123</jidjsaioj>,45456ihui";
+		Pattern pattern = Pattern.compile("^<(.\\w*)>\\w*\\.*\\w*</\\1>");
+		Matcher m = pattern.matcher(testStr);
+		if(m.find()) {
+			System.out.println(m.group());
+		}else {
+			System.out.println("未找到匹配字符串");
+		}
+	}
+	
+	/**
+	 * 测试StringBuilder的delete方法
+	 * @author: JOHN
+	 * @date: 2019年4月9日
+	 * @time: 上午10:41:56
+	 */
+	@Test
+	public void testFunc28() {
+		StringBuilder sb = new StringBuilder("123456");
+		sb.delete(0, 1);
+		System.out.println(sb.toString());
+		sb.delete(0, 1);
+		System.out.println(sb.toString());
+
+	}
+	
+	/**
+	 * 测试gson校验json字符串
+	 * @author: JOHN
+	 * @date: 2019年4月11日
+	 * @time: 上午9:29:14
+	 * 结论：gson对json字符串有良好的支持，它可以不用考虑转义的情况存在而直接判断当前字符串是否符合json格式
+	 */
+	@Test
+	public void testFunc29() {
+		 JsonElement jsonElement = null;
+	        try {
+	            jsonElement = new JsonParser().parse("{\"mine\":[1,2,3,4,5]}");
+	        } catch (Exception e) {
+	            System.out.println(false);
+	            return;
+	        }
+	        if (jsonElement == null) {
+	        	System.out.println(false);
+	        	return;
+	        }
+	        if (!jsonElement.isJsonObject() && !jsonElement.isJsonArray()) {
+	        	System.out.println(false);
+	        	return;
+	        }
+	        System.out.println(true);
+	}
+	
+	/**
+	 * 测试StringBuilder的indexOf方法的下标
+	 * @author: JOHN
+	 * @date: 2019年4月11日
+	 * @time: 上午10:15:35
+	 */
+	@Test
+	public void testFunc30() {
+		StringBuilder sb = new StringBuilder("1,23,456");
+		System.out.println(sb.indexOf(",",sb.indexOf(",")+1));
+		System.out.println(sb.indexOf(",",5));
+	}
+	/**
+	 * java动态编译groovy代码
+	 * @author: JOHN
+	 * @date: 2019年4月11日
+	 * @time: 下午12:38:53
+	 */
+	@Test
+	public void testFunc31() {
+		GroovyShell shell = new GroovyShell();  
+        String scriptText = "rrn 1;";  
+//        String scriptText = "def mul(x, y) { x * y }\nprintln mul(5, 7)";  
+//        String scriptText = args[0] + "\n" + args[1];  
+        Script script = shell.parse(scriptText);  
+        
+//        Object result = script.run();  
+	}
+	
+	/**
+	 * 下面代码会发生NumberFormatException的异常
+	 * @author: JOHN
+	 * @date: 2019年4月11日
+	 * @time: 下午2:54:58
+	 */
+	@Test
+	public void testFunc32() {
+		long l = Long.valueOf("9999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999");
+	}
 }
