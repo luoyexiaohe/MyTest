@@ -12,6 +12,7 @@ import java.util.Vector;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
+import org.codehaus.groovy.control.CompilationFailedException;
 import org.dom4j.Document;
 import org.dom4j.DocumentException;
 import org.dom4j.DocumentHelper;
@@ -20,6 +21,7 @@ import org.junit.Test;
 import com.google.gson.JsonElement;
 import com.google.gson.JsonParser;
 
+import Bean.Person;
 import groovy.lang.GroovyShell;
 import groovy.lang.Script;
 
@@ -469,7 +471,7 @@ public class TestClass {
 		System.out.println(sb.indexOf(",",5));
 	}
 	/**
-	 * java动态编译groovy代码
+	 * java动态编译groovy代码。即使没有正确的groovy代码，编译也不会报错，好心酸~~~
 	 * @author: JOHN
 	 * @date: 2019年4月11日
 	 * @time: 下午12:38:53
@@ -480,10 +482,14 @@ public class TestClass {
         String scriptText = "rrn 1;";  
 //        String scriptText = "def mul(x, y) { x * y }\nprintln mul(5, 7)";  
 //        String scriptText = args[0] + "\n" + args[1];  
-        Script script = shell.parse(scriptText);  
+        try {
+        	Script script = shell.parse(scriptText);  
+        }catch(CompilationFailedException e) {
+        	System.out.println(123);
+        }
         
 //        Object result = script.run();  
-	}
+	}  
 	
 	/**
 	 * 下面代码会发生NumberFormatException的异常
@@ -494,5 +500,76 @@ public class TestClass {
 	@Test
 	public void testFunc32() {
 		long l = Long.valueOf("9999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999");
+	}
+	
+	/**
+	 * 测试RunTimeException的捕获，处理及对虚拟机的影响
+	 * @author: JOHN
+	 * @date: 2019年5月19日
+	 * @time: 下午2:17:39
+	 */
+	@Test
+	public void testFunc33() {
+		try {
+			TestFunc33_1();
+		}catch(RuntimeException e) {
+			System.out.println(123);
+		}
+	}
+	
+	public void TestFunc33_1() {
+		System.out.println(5/0);
+	}
+	
+	/**
+	 * 测试switch-case的使用
+	 * @author: JOHN
+	 * @date: 2019年5月19日
+	 * @time: 下午2:18:53
+	 */
+	@Test
+	public void testFunc34() {
+		String str = "t";
+		switch (str){
+		case "t":
+			System.out.println("str is true");
+			break;
+		case "f":
+			System.out.println("str is false");
+			break;
+		default:
+			System.out.println("str is not a boolean");
+			break;
+		}
+	}
+	
+	/**
+	 * 测试两种执行groovy代码的速度
+	 * @author: JOHN
+	 * @date: 2019年5月19日
+	 * @time: 下午5:31:54
+	 */
+	@Test
+	public void testFunc35() {
+		GroovyShell shell = new GroovyShell();
+		
+		String groovyCode = "println 'My first groovy code !'";
+		Script text = shell.parse(groovyCode);
+		text.run();
+		long now = System.currentTimeMillis();
+		Script script = shell.parse(groovyCode);
+		script.run();
+		System.out.println("parse : "+(System.currentTimeMillis()-now));
+		now = System.currentTimeMillis();
+		shell.evaluate(groovyCode);
+		System.out.println("evaluate : "+(System.currentTimeMillis()-now));
+		
+	}
+	
+	@Test 
+	public void testFunc36() {
+		Person p1 = new Person();
+		
+		
 	}
 }

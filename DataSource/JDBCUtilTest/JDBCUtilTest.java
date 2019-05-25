@@ -11,14 +11,13 @@ import DataSource.JDBCUtil;
 
 import org.junit.Test;
 
-import DataSource.JDBCUtil;
 
 public class JDBCUtilTest {
 
 	@Test
 	public void test1() {
 		JDBCUtil.initialize();
-		String sql = "select * from user";
+		String sql = "select username from user where id = 5;";
 		Connection conn = JDBCUtil.conn;
         try {
             PreparedStatement ps = conn.prepareStatement(sql);
@@ -52,6 +51,22 @@ public class JDBCUtilTest {
             		System.out.println(resultMap.get(obj));
             	}
             }
+        }catch (SQLException e) {
+            e.printStackTrace();
+        }
+	}
+	
+	@Test
+	public void test3() {
+		JDBCUtil.initialize();
+		String sql = "insert into user(id,username,password) values(5,?,123242332);";
+		Connection conn = JDBCUtil.conn;
+        try {
+            PreparedStatement ps = conn.prepareStatement(sql);
+            String userName = "test1"+System.lineSeparator()+"test2";
+            ps.setString(1, userName);
+            boolean rs = ps.execute();
+            	System.out.println(rs);
         }catch (SQLException e) {
             e.printStackTrace();
         }
